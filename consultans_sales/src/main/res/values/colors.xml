@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#00ba92</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="color_80000000">#80000000</color>
+    <color name="color_f0f0f0">#f0f0f0f0</color>
+    <color name="color_red">#f00</color>
+    <color name="color_00BA91">#00BA91</color>
+    <color name="black">#000000</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_b4b4b4">#b4b4b4</color>
+    <color name="color_f5f5f5">#f5f5f5</color>
+    <color name="char_color52c6f6">#52c6f6</color>
+    <color name="char_color2995ea">#2995ea</color>
+    <color name="char_colorffdb4c">#ffdb4c</color>
+    <color name="char_colorffb631">#ffb631</color>
+    <color name="char_color9eea5e">#9eea5e</color>
+    <color name="char_color81cd42">#81cd42</color>
+    <color name="char_colore4e4e4">#E4E4E4</color>
+    <color name="color_295775">#295775</color>
+    <color name="color_8e8e8e">#8e8e8e</color>
+    <color name="color_00c3e8">#00c3e8</color>
+    <color name="color_007AFF">#007AFF</color>
+    <color name="prompt_error">#ff0000</color>
+    <color name="prompt_success">#31c27c</color>
+    <color name="prompt_warning">#f0633d</color>
+    <color name="color_373c3d">#373c3d</color>
+    <color name="color_010101">#010101</color>
+    <color name="color_111212">#111212</color>
+    <color name="color_272828">#272828</color>
+    <color name="color_c4111212">#c4111212</color>
+
+</resources>

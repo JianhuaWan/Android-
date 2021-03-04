@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/top_title_back_bar" />
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/simple_toolbar_main">
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.king.zxing.ViewfinderView
+            android:id="@+id/viewfinderView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp"
+            app:cornerColor="@color/white_color"
+            app:frameColor="@color/white_color"
+            app:frameRatio="0.6"
+            app:labelText="@string/tips_scan_code"
+            app:labelTextLocation="bottom"
+            app:labelTextSize="@dimen/size_14sp"
+            app:laserColor="@color/white_color"
+            app:laserStyle="line"
+            app:resultPointColor="@color/white_color"
+            app:scannerAnimationDelay="2"
+            app:scannerLineHeight="3dp"
+            app:scannerLineMoveDistance="3dp" />
+
+        <ImageView
+            android:id="@+id/ivFlash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/flash_selected_selector"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white_color">
+
+    </LinearLayout>
+
+</RelativeLayout>

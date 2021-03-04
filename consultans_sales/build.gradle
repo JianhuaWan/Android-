@@ -1,0 +1,224 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.mob.sdk'
+// 配置jenkins本版
+def gitVersionCode() {
+    def cmd = 'git rev-list HEAD --first-parent --count'
+    cmd.execute().text.trim().toInteger()
+}
+
+def gitVersionTag() {
+    def cmd = 'git describe --tags'
+    def version = cmd.execute().text.trim()
+
+    def pattern = "-(\\d+)-g"
+    def matcher = version =~ pattern
+
+    if (matcher) {
+        version = version.substring(0, matcher.start()) + "." + matcher[0][1]
+    } else {
+        version = version + ".0"
+    }
+
+    return version
+}
+
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    defaultConfig {
+        applicationId project.applicationID
+        minSdkVersion project.appMinSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        //versionCode project.versionCode
+        //versionName project.versionName
+        versionCode gitVersionCode()
+        versionName gitVersionTag() + "(" + gitVersionCode() + ")"
+        multiDexEnabled true
+        //必须要保证所有的flavor 都属于同一个维度
+        flavorDimensions "default"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                //room的数据库概要、记录
+                arguments = ["room.schemaLocation":
+                                     "$projectDir/schemas".toString()]
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'   // aar目录
+        }
+    }
+    sourceSets {
+        //数据库概要、记录存放位置
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+        main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        disable "ResourceType"
+    }
+    signingConfigs {
+        release {
+            storeFile file('vanketest.jks')
+            storePassword "vanke@2019"
+            keyAlias "com.vanke.sales.consultans"
+            keyPassword "vanke@2019"
+        }
+        debug {
+            storeFile file('vanketest.jks')
+            storePassword "vanke@2019"
+            keyAlias "com.vanke.sales.consultans"
+            keyPassword "vanke@2019"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [WECHAT_APPID    : "XXXXXXX",
+                                    APP_NAME        : "销售家",
+                                    UMNEG_APP_APPKEY: "5df74faa570df37e9b000c2e",
+                                    APP_PKGNAME     : "${project.applicationID}",
+                                    JPUSH_PKGNAME   : "${project.applicationID}",
+                                    JPUSH_APPKEY    : "b951a0fa66bbc902f210fede",
+                                    JPUSH_CHANNEL   : "developer-default"]
+            debuggable false
+            zipAlignEnabled true
+            shrinkResources false//不做优化
+            minifyEnabled false //这里如果用了反射或者动态代理开启会导致某些功能无法使用
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [WECHAT_APPID    : "XXXXXXX",
+                                    APP_NAME        : "销售家test",
+                                    UMNEG_APP_APPKEY: "5c90a96761f564ce4000026e",
+                                    APP_PKGNAME     : "${project.applicationID}.debug",
+                                    JPUSH_PKGNAME   : "${project.applicationID}.debug",
+                                    JPUSH_APPKEY    : "9fb1e6c01be4fc0323278aa5",
+                                    JPUSH_CHANNEL   : "developer-default"]
+            applicationIdSuffix ".debug"
+            debuggable true
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    //定义自己的编译环境
+    productFlavors {
+        envDev {
+            //开发环境
+            buildConfigField 'String', 'HOST', '"http://xxx/api/"'
+        }
+        envTest {
+            //测试环境
+            buildConfigField 'String', 'HOST', '"http://xxx/api/"'
+        }
+        envOnline {
+            //线上环境
+            buildConfigField 'String', 'HOST', '"http://xxx/api/"'
+        }
+    }
+    variantFilter { variant ->
+        if (variant.buildType.name == 'release' && variant.getFlavors().get(0).name != 'envOnline') {
+            //envTest没有release
+            variant.setIgnore(true)
+        } else if (variant.buildType.name == 'debug' && variant.getFlavors().get(0).name == 'envOnline') {
+            //envOnline没有debug
+            variant.setIgnore(true)
+        }
+    }
+}
+MobSDK {
+    appKey "2dbafd587f020"
+    appSecret "c4854dfb0bbfda64f8d0c2f7ea169d89"
+    ShareSDK {
+        loopShare true
+        devInfo {
+            SinaWeibo {
+                appKey "4141550911"
+                appSecret "95cc903fc8ad20bae173b7a758e1736b"
+                shareByAppClient true
+                callbackAct "${APP_PKGNAME}.MainActivity"
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QQ {
+                appId "101841717"
+                appKey "5dd3d573a2d9c8b49683821ffbf336dc"
+                shareByAppClient true
+            }
+            Douyin {
+                appKey "aw9ivykfjvi4hpwo"
+                appSecret "42b4caa6bda60bd49f05f06d0a4956e1"
+                callbackAct "${APP_PKGNAME}.MainActivity"
+                enable true
+            }
+        }
+    }
+    SecVerify {}
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':net_lib')
+    implementation project(':videoplayer')
+    implementation(name: 'xtablayout-1.0.1', ext: 'aar')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+    implementation 'me.yokeyword:fragmentationx:1.0.2'
+    implementation 'me.yokeyword:eventbus-activity-scope:1.1.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.githang:status-bar-compat:0.7'
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-10'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'//一个开源gif控件
+    //umeng 统计
+    implementation 'com.umeng.umsdk:analytics:8.0.0'
+    implementation 'com.umeng.umsdk:common:2.0.0'
+    implementation 'com.zhy:okhttputils:2.6.2'
+    implementation 'androidx.room:room-runtime:2.2.3'
+    annotationProcessor 'androidx.room:room-compiler:2.2.3'
+    implementation "com.commonsware.cwac:saferoom:1.0.2" //release时候开放,debug默认不加密
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'cn.jiguang.sdk:jpush:3.2.0'
+    implementation 'cn.jiguang.sdk:jcore:1.2.7'
+    implementation 'com.dianping.android.sdk:logan:1.2.3'
+    //判断手机年份,对不同设备做不同处理(代码太老)
+    //implementation 'com.facebook.device.yearclabasess:yearclass:2.1.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
+    releaseImplementation 'com.squareup.leakcanary:leaksentry:2.0-alpha-2'
+    implementation 'me.jessyan:autosize:1.1.2'
+    //dex分包
+    implementation 'com.github.youlookwhat:WebProgress:1.1.0'
+    //zxing扫码
+    implementation 'com.king.zxing:zxing-lite:1.1.5'
+    //字体
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+}

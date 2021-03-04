@@ -1,0 +1,8 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+/build
+*.apk
+/consultans_sales/build
+net_lib/build/

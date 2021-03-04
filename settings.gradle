@@ -1,0 +1,7 @@
+include ':net_lib', ':consultans_sales', ':videoplayer'
+//':consultans_sales'
+//setBinding(new Binding([gradle: this]))                                 // new
+//evaluate(new File(                                                      // new
+//        settingsDir,                                               // new
+//        'flutter_module/.android/include_flutter.groovy'                      // new
+//))

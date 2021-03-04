@@ -1,0 +1,62 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+        mavenLocal()
+        maven {
+            url 'https://dl.bintray.com/umsdk/release'
+        }
+        maven {
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.31"
+        classpath "com.mob.sdk:MobSDK:2018.0319.1724"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+        mavenLocal()
+        maven {
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
+        maven {
+            url 'https://jitpack.io'
+        }
+        maven {
+            url 'https://dl.bintray.com/umsdk/release'
+        }
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+subprojects {
+    ext {
+        compileSdkVersion = 29
+        buildToolsVersion = "28.0.3"
+        appMinSdkVersion = 19
+        targetSdkVersion = 29
+        supportLibVersion = "28.0.3"
+        versionCode = 1001
+        versionName = "1.0.0.1"
+        applicationID = "consultan.vanke.com"
+    }
+}

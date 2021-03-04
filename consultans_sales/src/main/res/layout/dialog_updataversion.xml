@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/roctet_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/updataversion_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:text="@string/upgrade"
+        android:textColor="@color/color_295775"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/updataversioncode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="1.0.5"
+        android:textColor="@color/color_295775"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/updataversion_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/upgrade_info"
+        android:textColor="@color/color_8e8e8e"
+        android:textSize="13sp" />
+
+
+    <LinearLayout
+        android:id="@+id/dialog_sure"
+        android:layout_width="240dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/updataversionbut_bg"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/upgrade_sure"
+            android:textColor="@color/white_color"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
